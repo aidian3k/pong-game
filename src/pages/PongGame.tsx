@@ -13,7 +13,7 @@ export const PongGame: FC = () => {
     const [minutes, setMinutes] = useState<number>(0);
     const [rightY, setRightY] = useState<number>(250);
     const [leftY, setLeftY] = useState<number>(250);
-    const [ballPosition, setBallPosition] = useState<{x: number, y: number, dx:number, dy: number}>({x: 235, y:250, dx: 1, dy: 1});
+    const [ballPosition, setBallPosition] = useState<{x: number, y: number, dx:number, dy: number}>({x: 235, y:250, dx: 2, dy: 2});
 
     useEffect(() => {
         let timeOut = setInterval(() => {
@@ -39,39 +39,34 @@ export const PongGame: FC = () => {
         }
 
         const pongGameLoop = () => {
-            if (ballPosition.y >= leftY && ballPosition.y <= leftY + 70
-                && ballPosition.x <= 15) {
+            if (ballPosition.y >= leftY && ballPosition.y <= leftY + 70 && ballPosition.x <= 30) {
                 console.log(`LEFT PADDLE:(${leftY})`)
                 ballPosition.dx *= -1;
-            }
-
-            else if (ballPosition.x <= 0) {
-                console.log(`LEFT WALL: BALL:(${ballPosition.x}, ${ballPosition.y}, ${ballPosition.dx}, ${ballPosition.dy})`)
+            } else if(ballPosition.x <= 0 && ballPosition.y > 150 && ballPosition.y < 350) {
                 ballPosition.dx *= -1;
                 setScore({...score, rightPlayer: score.rightPlayer + 1});
+            } else if (ballPosition.x <= 0) {
+                console.log(`LEFT WALL: BALL:(${ballPosition.x}, ${ballPosition.y}, ${ballPosition.dx}, ${ballPosition.dy})`)
+                ballPosition.dx *= -1;
             }
 
-            // check for bounce off right paddle
-            if (ballPosition.y >= rightY && ballPosition.y <= rightY + 70
-                && ballPosition.x >= 500 - (15 + 70)) {
+            if ((ballPosition.y >= rightY && ballPosition.y <= rightY + 70) && ballPosition.x >= 500 - (15 + 30)) {
                 console.log(`RIGHT PADDLE:(${rightY})`)
                 ballPosition.dx *= -1;
-            }
-
-            // check for bounce off right wall
-            else if (ballPosition.x >= 500 - 30) {
+            } else if(ballPosition.x >= 500 - 30 && ballPosition.y > 150 && ballPosition.y < 350) {
+                console.log(ballPosition.x, ballPosition.y)
+                ballPosition.dx *= -1;
+                setScore({...score, leftPlayer: score.leftPlayer + 1});
+            } else if (ballPosition.x >= 500 - 30) {
                 console.log(`RIGHT WALL: BALL:(${ballPosition.x}, ${ballPosition.y}, ${ballPosition.dx}, ${ballPosition.dy})`)
                 ballPosition.dx *= -1;
-                setScore({...score, rightPlayer: score.rightPlayer + 1})
             }
 
-            // check for bounce off top border
-            if (ballPosition.y <= 0) {
+            if (ballPosition.y <= 30) {
                 console.log(`TOP WALL: BALL:(${ballPosition.x}, ${ballPosition.y}, ${ballPosition.dx}, ${ballPosition.dy})`)
                 ballPosition.dy *= -1;
             }
 
-            // check for bounce off bottom wall
             if (ballPosition.y >= 470) {
                 ballPosition.dy *= -1;
             }
@@ -87,10 +82,10 @@ export const PongGame: FC = () => {
     }, [ballPosition, leftY, rightY, isPaused]);
 
     useEffect(() => {
-        const wKeyNumber = 87;
-        const sKeyNumber = 83;
-        const upArrowKeyNumber = 38;
-        const downArrowKeyNumber = 40;
+        const wKeyNumber: number = 87;
+        const sKeyNumber: number = 83;
+        const upArrowKeyNumber: number = 38;
+        const downArrowKeyNumber: number = 40;
 
         const keyClicked = (event: any) => {
             const currentKeyClicked = event.which;
