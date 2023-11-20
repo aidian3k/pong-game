@@ -1,4 +1,4 @@
 export enum BallProperties {
-    ballHeight = 300,
-    ballWidth = 300
+    BALL_HEIGHT = 30,
+    BALL_WIDTH = 30
 }

@@ -5,15 +5,18 @@ import {Paddle} from "../components/Paddle";
 import {Field} from "../components/Field";
 import {Button} from "../components/Button";
 import {Score} from "../components/Score";
+import {BoardProperties} from "../properties/board.properties";
+import {BallProperties} from "../properties/ball.properties";
+import {PaddleProperties} from "../properties/paddle.properties";
 
 export const PongGame: FC = () => {
     const [score, setScore] = useState<{leftPlayer: number, rightPlayer: number}>({leftPlayer: 0, rightPlayer: 0})
     const [isPaused, setIsPaused] = useState<boolean>(false);
     const [seconds, setSeconds] = useState<number>(0);
     const [minutes, setMinutes] = useState<number>(0);
-    const [rightY, setRightY] = useState<number>(250);
-    const [leftY, setLeftY] = useState<number>(250);
-    const [ballPosition, setBallPosition] = useState<{x: number, y: number, dx:number, dy: number}>({x: 235, y:250, dx: 2, dy: 2});
+    const [rightY, setRightY] = useState<number>(BoardProperties.BOARD_HEIGHT / 2);
+    const [leftY, setLeftY] = useState<number>(BoardProperties.BOARD_HEIGHT / 2);
+    const [ballPosition, setBallPosition] = useState<{x: number, y: number, dx:number, dy: number}>({x: BoardProperties.BOARD_WIDTH - BallProperties.BALL_WIDTH / 2, y: BoardProperties.BOARD_HEIGHT/ 2, dx: 2, dy: 2});
 
     useEffect(() => {
         let timeOut = setInterval(() => {
@@ -39,35 +42,29 @@ export const PongGame: FC = () => {
         }
 
         const pongGameLoop = () => {
-            if (ballPosition.y >= leftY && ballPosition.y <= leftY + 70 && ballPosition.x <= 30) {
-                console.log(`LEFT PADDLE:(${leftY})`)
+            if (ballPosition.y >= leftY && ballPosition.y <= leftY + PaddleProperties.PADDLE_HEIGHT && ballPosition.x <= BallProperties.BALL_WIDTH) {
                 ballPosition.dx *= -1;
             } else if(ballPosition.x <= 0 && ballPosition.y > 150 && ballPosition.y < 350) {
                 ballPosition.dx *= -1;
                 setScore({...score, rightPlayer: score.rightPlayer + 1});
             } else if (ballPosition.x <= 0) {
-                console.log(`LEFT WALL: BALL:(${ballPosition.x}, ${ballPosition.y}, ${ballPosition.dx}, ${ballPosition.dy})`)
                 ballPosition.dx *= -1;
             }
 
-            if ((ballPosition.y >= rightY && ballPosition.y <= rightY + 70) && ballPosition.x >= 500 - (15 + 30)) {
-                console.log(`RIGHT PADDLE:(${rightY})`)
+            if ((ballPosition.y >= rightY && ballPosition.y <= rightY + PaddleProperties.PADDLE_HEIGHT) && ballPosition.x >= BoardProperties.BOARD_WIDTH - (PaddleProperties.PADDLE_WIDTH + BallProperties.BALL_WIDTH)) {
                 ballPosition.dx *= -1;
-            } else if(ballPosition.x >= 500 - 30 && ballPosition.y > 150 && ballPosition.y < 350) {
-                console.log(ballPosition.x, ballPosition.y)
+            } else if(ballPosition.x >= BoardProperties.BOARD_WIDTH - BallProperties.BALL_WIDTH && ballPosition.y > 150 && ballPosition.y < 350) {
                 ballPosition.dx *= -1;
                 setScore({...score, leftPlayer: score.leftPlayer + 1});
-            } else if (ballPosition.x >= 500 - 30) {
-                console.log(`RIGHT WALL: BALL:(${ballPosition.x}, ${ballPosition.y}, ${ballPosition.dx}, ${ballPosition.dy})`)
+            } else if (ballPosition.x >= BoardProperties.BOARD_WIDTH - BallProperties.BALL_WIDTH) {
                 ballPosition.dx *= -1;
             }
 
-            if (ballPosition.y <= 30) {
-                console.log(`TOP WALL: BALL:(${ballPosition.x}, ${ballPosition.y}, ${ballPosition.dx}, ${ballPosition.dy})`)
+            if (ballPosition.y <= BallProperties.BALL_HEIGHT) {
                 ballPosition.dy *= -1;
             }
 
-            if (ballPosition.y >= 470) {
+            if (ballPosition.y >= BoardProperties.BOARD_HEIGHT - BallProperties.BALL_HEIGHT) {
                 ballPosition.dy *= -1;
             }
 
@@ -79,7 +76,7 @@ export const PongGame: FC = () => {
         return () => {
             clearInterval(gameInterval)
         }
-    }, [ballPosition, leftY, rightY, isPaused]);
+    }, [ballPosition, leftY, rightY, isPaused, score]);
 
     useEffect(() => {
         const wKeyNumber: number = 87;
