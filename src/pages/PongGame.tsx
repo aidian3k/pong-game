@@ -113,7 +113,7 @@ export const PongGame: FC = () => {
     function restartPongGame(): void {
         setMinutes(0);
         setSeconds(0);
-        setBallPosition({x: 235, y:250, dx:1, dy: 1})
+        setBallPosition({x: 235, y:250, dx: 2, dy: 2})
         setRightY(250);
         setLeftY(250);
         setIsPaused(false);
