@@ -16,7 +16,7 @@ export const PongGame: FC = () => {
     const [minutes, setMinutes] = useState<number>(0);
     const [rightY, setRightY] = useState<number>(BoardProperties.BOARD_HEIGHT / 2);
     const [leftY, setLeftY] = useState<number>(BoardProperties.BOARD_HEIGHT / 2);
-    const [ballPosition, setBallPosition] = useState<{x: number, y: number, dx:number, dy: number}>({x: BoardProperties.BOARD_WIDTH - BallProperties.BALL_WIDTH / 2, y: BoardProperties.BOARD_HEIGHT/ 2, dx: 2, dy: 2});
+    const [ballPosition, setBallPosition] = useState<{x: number, y: number, dx:number, dy: number}>({x: BoardProperties.BOARD_WIDTH / 2 - BallProperties.BALL_WIDTH / 2, y: BoardProperties.BOARD_HEIGHT / 2, dx: 2, dy: 2});
 
     useEffect(() => {
         let timeOut = setInterval(() => {
